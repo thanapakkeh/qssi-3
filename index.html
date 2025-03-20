@@ -30,6 +30,15 @@
   <div id="result" class="section"></div>
 
   <script>
+    let data2 = {};
+    // โหลด data2.json ด้วย
+    fetch('data2.json')
+      .then(res => res.json())
+      .then(json => {
+        json.forEach(item => {
+          data2[item["รหัสร้าน"]] = item;
+        });
+      });
     let data;
     const inspectorSelect = document.getElementById('inspector');
     const resultDiv = document.getElementById('result');
@@ -58,6 +67,22 @@
       const entries = data[shopId];
 
       resultDiv.innerHTML = '';
+
+      // แสดงข้อมูลร้านจาก data2.json
+      const shopInfo = data2[shopId];
+      if (shopInfo) {
+        const infoHtml = `
+          <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <strong>ชื่อสาขา:</strong> ${shopInfo["ชื่อสาขา"]} <br>
+            <strong>ภาค:</strong> ${shopInfo["ภาค"]} |
+            <strong>จังหวัด:</strong> ${shopInfo["จังหวัด"]} <br>
+            <strong>สถานะ:</strong> ${shopInfo["สถานะ"]} |
+            <strong>โทรศัพท์:</strong> ${shopInfo["โทรศัพท์"]} <br>
+            <strong>ผู้ตรวจประจำ:</strong> ${shopInfo["ชื่อผู้ตรวจ"]}
+          </div>`;
+        resultDiv.innerHTML += infoHtml;
+      }
+    
 
       if (!entries) {
         resultDiv.innerHTML = `<p style="color:red">ไม่พบข้อมูลร้านนี้</p>`;
