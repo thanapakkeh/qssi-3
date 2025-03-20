@@ -30,6 +30,41 @@
   <div id="result" class="section"></div>
 
   <script>
+    let data = {};
+    let data2 = {};
+    let dataReady = false;
+
+    const inspectorSelect = document.getElementById('inspector');
+    const resultDiv = document.getElementById('result');
+    const button = document.querySelector('button');
+
+    button.disabled = true;
+    button.textContent = 'กำลังโหลดข้อมูล...';
+
+    Promise.all([
+      fetch('data_inspectors.json').then(res => res.json()),
+      fetch('data2.json').then(res => res.json())
+    ]).then(([inspectors, shops]) => {
+      data = inspectors;
+      const names = new Set();
+      for (const entries of Object.values(data)) {
+        entries.forEach(item => names.add(item["ผู้ตรวจ"]));
+      }
+      [...names].sort().forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        inspectorSelect.appendChild(opt);
+      });
+
+      shops.forEach(item => {
+        data2[item["รหัสร้าน"]] = item;
+      });
+
+      dataReady = true;
+      button.disabled = false;
+      button.textContent = 'ตรวจสอบ';
+    });
     let data2 = {};
     // โหลด data2.json ด้วย
     fetch('data2.json')
