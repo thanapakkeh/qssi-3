@@ -61,7 +61,13 @@
         });
       });
 
-    function checkData() {
+    async function checkData() {
+      // รอโหลด data2 ถ้ายังไม่เสร็จ
+      if (Object.keys(data2).length === 0) {
+        resultDiv.innerHTML = "<p style='color:red'>กำลังโหลดข้อมูลร้าน... กรุณารอสักครู่แล้วกดตรวจสอบอีกครั้ง</p>";
+        return;
+      }
+    
       const selectedName = inspectorSelect.value;
       const shopId = document.getElementById('shopId').value.trim();
       const entries = data[shopId];
@@ -115,3 +121,7 @@
   </script>
 </body>
 </html>
+
+      else {
+        resultDiv.innerHTML += `<p style='color:red'>ไม่พบข้อมูลร้านนี้ใน data2.json</p>`;
+      }
